@@ -59,6 +59,8 @@ public class GStreamerController : BaseController
     [HttpGet("/gst/add")]
     public async Task<ActionResult> Add(string link, string linkencode, string uid, string token)
     {
+        SetHeadersNoCache();
+
         if (!ModInit.conf.enable)
             return StatusCode(403);
 
@@ -90,6 +92,8 @@ public class GStreamerController : BaseController
     [HttpGet("/gst/remove")]
     public async Task<ActionResult> Remove(ulong id)
     {
+        SetHeadersNoCache();
+
         if (!ModInit.conf.enable)
             return StatusCode(403);
 
@@ -106,11 +110,13 @@ public class GStreamerController : BaseController
     }
     #endregion
 
-    #region Heartbeat
+    #region heartbeat
     [AllowAnonymous]
     [HttpGet("/gst/{id}/heartbeat")]
     public ActionResult Heartbeat(ulong id)
     {
+        SetHeadersNoCache();
+
         if (!ModInit.conf.enable)
             return StatusCode(403);
 
@@ -118,6 +124,34 @@ public class GStreamerController : BaseController
             return Ok();
 
         return StatusCode(404);
+    }
+    #endregion
+
+    #region probe
+    [HttpGet("/gst/probe")]
+    public async Task<ActionResult> Probe(string link, string linkencode, string uid, string token)
+    {
+        SetHeadersNoCache();
+
+        if (!ModInit.conf.enable)
+            return StatusCode(403);
+
+        string user_id = uid ?? token;
+        if (ModInit.conf.allowed_uids != null && !ModInit.conf.allowed_uids.Contains(user_id))
+            return StatusCode(401);
+
+        string sourceUrl = link;
+        if (string.IsNullOrEmpty(sourceUrl) && !string.IsNullOrEmpty(linkencode))
+            sourceUrl = CrypTo.DecodeBase64(linkencode);
+
+        var result = await GService.GetProbe(sourceUrl).ConfigureAwait(false);
+        if (result.probe == null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status502BadGateway;
+            return Content(result.error);
+        }
+
+        return Json(result.probe);
     }
     #endregion
 
