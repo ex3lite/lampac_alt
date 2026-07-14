@@ -154,7 +154,7 @@ function lampacDoramaTmdbUrl(url, page) {
 
   var protocol = Lampa.Utils && Lampa.Utils.protocol ? Lampa.Utils.protocol() : 'http://';
   var proxy = Lampa.Storage && Lampa.Storage.field && Lampa.Storage.field('proxy_tmdb');
-  var base = proxy ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/';
+  var base = proxy ? 'lampa.trustg.ru/tmdb/api/3/' : 'api.themoviedb.org/3/';
 
   return protocol + base + url;
 }
@@ -393,4 +393,3 @@ function addLampacDoramaMenuButton(attempt) {
 
   readyLampacDorama();
 })();
-

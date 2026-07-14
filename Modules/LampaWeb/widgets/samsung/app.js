@@ -726,7 +726,7 @@
 
   var html$13 = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"cloud_use\">\n        <div class=\"settings-param__name\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0434\u0430\u0451\u0442 \u0432\u043E\u0437\u043C\u043E\u0436\u043D\u043E\u0441\u0442\u044C \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C \u0432\u0430\u0448\u0438 \u0437\u0430\u043A\u043B\u0430\u0434\u043A\u0438, \u0438\u0441\u0442\u043E\u0440\u0438\u044E \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u043E\u0432, \u043C\u0435\u0442\u043A\u0438 \u0438 \u0442\u0430\u0439\u043C-\u043A\u043E\u0434\u044B. \u0418\u043D\u0441\u0442\u0440\u0443\u043A\u0446\u0438\u044F \u043F\u043E \u043F\u043E\u0434\u043A\u043B\u044E\u0447\u0435\u043D\u0438\u044E https://github.com/yumata/lampa/wiki</div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F</span></div>\n\n    <div class=\"settings-param selector\" data-type=\"input\" data-name=\"cloud_token\" placeholder=\"\u041D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D\">\n        <div class=\"settings-param__name\">Token</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u0442\u0430\u0442\u0443\u0441</span></div>\n\n    <div class=\"settings-param selector settings--cloud-status\" data-static=\"true\">\n        <div class=\"settings-param__name\"></div>\n        <div class=\"settings-param__descr\"></div>\n    </div>\n</div>";
 
-  var html$12 = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"account_use\">\n        <div class=\"settings-param__name\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0441 \u0441\u0435\u0440\u0432\u0438\u0441\u043E\u043C CUB: \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0432\u0430\u0448\u0438\u0445 \u0437\u0430\u043A\u043B\u0430\u0434\u043E\u043A, \u0438\u0441\u0442\u043E\u0440\u0438\u0438 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u043E\u0432, \u043C\u0435\u0442\u043E\u043A \u0438 \u0442\u0430\u0439\u043C-\u043A\u043E\u0434\u043E\u0432. \u0421\u0430\u0439\u0442: https://cub.watch</div>\n    </div>\n\n    <div class=\"settings-param-title settings--account-user hide\"><span>\u0410\u043A\u043A\u0430\u0443\u043D\u0442</span></div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-info hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0412\u043E\u0448\u043B\u0438 \u043A\u0430\u043A</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-profile hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u041F\u0440\u043E\u0444\u0438\u043B\u044C</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-sync hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C</div>\n        <div class=\"settings-param__value\">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u043B\u043E\u043A\u0430\u043B\u044C\u043D\u044B\u0435 \u0437\u0430\u043A\u043B\u0430\u0434\u043A\u0438 \u0432 \u0430\u043A\u043A\u0430\u0443\u043D\u0442 CUB</div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-backup hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0411\u044D\u043A\u0430\u043F</div>\n        <div class=\"settings-param__value\">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u043B\u0438 \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0431\u044D\u043A\u0430\u043F \u0434\u0430\u043D\u043D\u044B\u0445</div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-out hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0412\u044B\u0439\u0442\u0438 \u0438\u0437 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u0430</div>\n    </div>\n\n    <div class=\"settings-param-title settings--account-signin\"><span>\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F</span></div>\n\n    <div class=\"settings-param selector settings--account-signin\" data-type=\"input\" data-name=\"account_email\" placeholder=\"\u041D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D\">\n        <div class=\"settings-param__name\">Email</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-signin\" data-type=\"input\" data-string=\"true\" data-name=\"account_password\" placeholder=\"\u041D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D\">\n        <div class=\"settings-param__name\">\u041F\u0430\u0440\u043E\u043B\u044C</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u0442\u0430\u0442\u0443\u0441</span></div>\n\n    <div class=\"settings-param selector settings--account-status\" data-static=\"true\">\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\"></div>\n    </div>\n</div>";
+  var html$12 = "<div>\n    <div class=\"settings-param selector\" data-type=\"toggle\" data-name=\"account_use\">\n        <div class=\"settings-param__name\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F</div>\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0441 \u0441\u0435\u0440\u0432\u0438\u0441\u043E\u043C CUB: \u0441\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0430\u0446\u0438\u044F \u0432\u0430\u0448\u0438\u0445 \u0437\u0430\u043A\u043B\u0430\u0434\u043E\u043A, \u0438\u0441\u0442\u043E\u0440\u0438\u0438 \u043F\u0440\u043E\u0441\u043C\u043E\u0442\u0440\u043E\u0432, \u043C\u0435\u0442\u043E\u043A \u0438 \u0442\u0430\u0439\u043C-\u043A\u043E\u0434\u043E\u0432. \u0421\u0430\u0439\u0442: https://lampa.trustg.ru/account/</div>\n    </div>\n\n    <div class=\"settings-param-title settings--account-user hide\"><span>\u0410\u043A\u043A\u0430\u0443\u043D\u0442</span></div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-info hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0412\u043E\u0448\u043B\u0438 \u043A\u0430\u043A</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-profile hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u041F\u0440\u043E\u0444\u0438\u043B\u044C</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-sync hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0421\u0438\u043D\u0445\u0440\u043E\u043D\u0438\u0437\u0438\u0440\u043E\u0432\u0430\u0442\u044C</div>\n        <div class=\"settings-param__value\">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u043B\u043E\u043A\u0430\u043B\u044C\u043D\u044B\u0435 \u0437\u0430\u043A\u043B\u0430\u0434\u043A\u0438 \u0432 \u0430\u043A\u043A\u0430\u0443\u043D\u0442 CUB</div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-backup hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0411\u044D\u043A\u0430\u043F</div>\n        <div class=\"settings-param__value\">\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C \u0438\u043B\u0438 \u0437\u0430\u0433\u0440\u0443\u0437\u0438\u0442\u044C \u0431\u044D\u043A\u0430\u043F \u0434\u0430\u043D\u043D\u044B\u0445</div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-user settings--account-user-out hide\" data-static=\"true\">\n        <div class=\"settings-param__name\">\u0412\u044B\u0439\u0442\u0438 \u0438\u0437 \u0430\u043A\u043A\u0430\u0443\u043D\u0442\u0430</div>\n    </div>\n\n    <div class=\"settings-param-title settings--account-signin\"><span>\u0410\u0432\u0442\u043E\u0440\u0438\u0437\u0430\u0446\u0438\u044F</span></div>\n\n    <div class=\"settings-param selector settings--account-signin\" data-type=\"input\" data-name=\"account_email\" placeholder=\"\u041D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D\">\n        <div class=\"settings-param__name\">Email</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param selector settings--account-signin\" data-type=\"input\" data-string=\"true\" data-name=\"account_password\" placeholder=\"\u041D\u0435 \u0443\u043A\u0430\u0437\u0430\u043D\">\n        <div class=\"settings-param__name\">\u041F\u0430\u0440\u043E\u043B\u044C</div>\n        <div class=\"settings-param__value\"></div>\n    </div>\n\n    <div class=\"settings-param-title\"><span>\u0421\u0442\u0430\u0442\u0443\u0441</span></div>\n\n    <div class=\"settings-param selector settings--account-status\" data-static=\"true\">\n        <div class=\"settings-param__value\"></div>\n        <div class=\"settings-param__descr\"></div>\n    </div>\n</div>";
 
   var html$11 = "<div class=\"items-line\">\n    <div class=\"items-line__head\">\n        <div class=\"items-line__title\">{title}</div>\n    </div>\n    <div class=\"items-line__body\"></div>\n</div>";
 
@@ -6633,7 +6633,7 @@
     clearInterval(ping);
 
     try {
-      socket = new WebSocket('wss://cub.watch:8020');
+      socket = new WebSocket('wss://lampa.trustg.ru/account/:8020');
     } catch (e) {
       console.log('Socket', 'not work');
       return;
@@ -6702,7 +6702,7 @@
 
   var body$3;
   var network$9 = new create$q();
-  var api = Utils.protocol() + 'cub.watch/api/';
+  var api = Utils.protocol() + 'lampa.trustg.ru/account//api/';
   var notice_load = {
     time: 0,
     data: []
@@ -7709,7 +7709,7 @@
       if (object$1.imdb_id) {
         req(object$1.imdb_id);
       } else {
-        var dom = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/';
+        var dom = Storage.field('proxy_tmdb') ? 'lampa.trustg.ru/tmdb/api/3/' : 'api.themoviedb.org/3/';
         network$8.silent('http://' + dom + 'movie/' + object$1.id + '/external_ids?api_key=4ef0d7355d9ffb5151e987764708ce96&language=ru', function (ttid) {
           req(ttid.imdb_id, object$1.title);
         }, save$3);
@@ -7772,7 +7772,7 @@
       }
     }
 
-    var base = Storage.field('proxy_tmdb') ? 'apitmdb.cub.watch/3/' : 'api.themoviedb.org/3/';
+    var base = Storage.field('proxy_tmdb') ? 'lampa.trustg.ru/tmdb/api/3/' : 'api.themoviedb.org/3/';
     return Utils.protocol() + base + u;
   }
 
@@ -7782,7 +7782,7 @@
 
   function img$2(src, size) {
     var poster_size = Storage.field('poster_size');
-    var baseimg = Utils.protocol() + (Storage.field('proxy_tmdb') ? 'imagetmdb.cub.watch' : 'image.tmdb.org') + '/t/p/' + poster_size + '/';
+    var baseimg = Utils.protocol() + (Storage.field('proxy_tmdb') ? 'lampa.trustg.ru/tmdb/img' : 'image.tmdb.org') + '/t/p/' + poster_size + '/';
     var path = baseimg;
     if (size) path = path.replace(new RegExp(poster_size, 'g'), size);
     return src ? path + src : '';
@@ -8203,7 +8203,7 @@
     menuCategory: menuCategory$2
   };
 
-  var prox$1 = 'http://proxy.cub.watch/img/';
+  var prox$1 = 'http://lampa.trustg.ru/cub-disabled/img/';
   var baseurl$2 = 'https://ctx.playfamily.ru/screenapi/v1/noauth/';
   var network$6 = new create$q();
   var menu_list$1 = [];
@@ -8668,7 +8668,7 @@
   var baseurl$1 = 'https://api.ivi.ru/mobileapi/';
   var network$5 = new create$q();
   var menu_list = [];
-  var prox = 'http://proxy.cub.watch/img/';
+  var prox = 'http://lampa.trustg.ru/cub-disabled/img/';
 
   function tocard(element) {
     return {
@@ -9224,7 +9224,7 @@
     clear: network$5.clear
   };
 
-  var baseurl = Utils.protocol() + 'tmdb.cub.watch/';
+  var baseurl = Utils.protocol() + 'lampa.trustg.ru/cub-disabled/';
   var network$4 = new create$q();
 
   function url$1(u) {
@@ -9925,7 +9925,7 @@
 
 
   function relise(oncomplite, onerror) {
-    network$2.silent(Utils.protocol() + 'tmdb.cub.watch?sort=releases&results=200', function (json) {
+    network$2.silent(Utils.protocol() + 'lampa.trustg.ru/cub-disabled?sort=releases&results=200', function (json) {
       json.results.forEach(function (item) {
         item.tmdbID = item.id;
       });
@@ -13089,9 +13089,9 @@
             var tpl = Template.get('torrent_install', {});
             Storage.set('favotite_offer', 'true');
             tpl.find('.torrent-install__title').text('Синхронизация закладок');
-            tpl.find('.torrent-install__descr').html('Хочешь чтобы твои любимые закладки были на всех твоих устройствах? <br><br>Зарегистрируйся на сайте www.cub.watch, создай профиль и авторизуйся в лампе.');
+            tpl.find('.torrent-install__descr').html('Хочешь чтобы твои любимые закладки были на всех твоих устройствах? <br><br>Зарегистрируйся на сайте lampa.trustg.ru/account/, создай профиль и авторизуйся в лампе.');
             tpl.find('.torrent-install__label').remove();
-            tpl.find('.torrent-install__links').html('<div class="torrent-install__link"><div>Сайт</div><div>www.cub.watch</div></div>');
+            tpl.find('.torrent-install__links').html('<div class="torrent-install__link"><div>Сайт</div><div>lampa.trustg.ru/account/</div></div>');
             tpl.find('.torrent-install__left img').attr('src', '{localhost}/lampa-main/img/ili/bookmarks.png');
             Modal.open({
               title: '',
@@ -15296,7 +15296,7 @@
 
         if (air_epis.length == 1) {
           var preview = $('<div class="timetable__preview"><img><div>' + (air_epis[0].episode.name || 'Без названия') + '</div></div>');
-          Utils.imgLoad(preview.find('img'), Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/' + air_epis[0].episode.still_path, false, function () {
+          Utils.imgLoad(preview.find('img'), Utils.protocol() + 'lampa.trustg.ru/tmdb/img/t/p/w200/' + air_epis[0].episode.still_path, false, function () {
             preview.find('img').remove();
           });
           item.find('.timetable__body').prepend(preview);
@@ -15317,7 +15317,7 @@
             title: elem.card.name,
             descr: 'Cезон - <b>' + elem.episode.season_number + '</b><br>Эпизод - <b>' + elem.episode.episode_number + '</b>'
           });
-          Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : Utils.protocol() + 'imagetmdb.cub.watch/t/p/w200/' + elem.card.poster_path);
+          Utils.imgLoad(noty.find('img'), elem.card.poster ? elem.card.poster : elem.card.img ? elem.card.img : Utils.protocol() + 'lampa.trustg.ru/tmdb/img/t/p/w200/' + elem.card.poster_path);
           noty.on('hover:enter', function () {
             Modal.close();
             Activity$1.push({
@@ -15576,7 +15576,7 @@
             img.src = './img/img_broken.svg';
           };
 
-          img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : Utils.protocol() + 'imagetmdb.cub.watch/t/p/' + poster_size + '/' + element.card.poster_path;
+          img.src = element.card.poster ? element.card.poster : element.card.img ? element.card.img : Utils.protocol() + 'lampa.trustg.ru/tmdb/img/t/p/' + poster_size + '/' + element.card.poster_path;
           item.on('hover:enter', function () {
             Modal.close();
             Activity$1.push({
@@ -18995,7 +18995,7 @@
     }
 
     network.timeout(10000);
-    network.silent(Utils.protocol() + 'cub.watch/api/plugins/installs', complite, function () {
+    network.silent(Utils.protocol() + 'lampa.trustg.ru/account//api/plugins/installs', complite, function () {
       complite({
         plugins: []
       });
@@ -19185,7 +19185,7 @@
       title: card.title || card.name,
       subtitle: subtitle || relise,
       image_ratio: '1by1',
-      image_url: card.poster ? card.poster : card.img ? card.img : 'http://imagetmdb.cub.watch/t/p/w300/' + card.poster_path,
+      image_url: card.poster ? card.poster : card.img ? card.img : 'http://lampa.trustg.ru/tmdb/img/t/p/w300/' + card.poster_path,
       action_data: JSON.stringify(card),
       is_playable: false
     };
@@ -19481,7 +19481,7 @@
 
     Favorite.listener.follow('add,added', function (e) {
       if (e.where == 'history' && e.card.id) {
-        $.get(Utils.protocol() + 'tmdb.cub.watch/watch?id=' + e.card.id + '&cat=' + (e.card.original_name ? 'tv' : 'movie'));
+        $.get(Utils.protocol() + 'lampa.trustg.ru/cub-disabled/watch?id=' + e.card.id + '&cat=' + (e.card.original_name ? 'tv' : 'movie'));
       }
     });
     /** End */

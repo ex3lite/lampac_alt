@@ -638,6 +638,13 @@ public class ApiController : BaseController
             if (ModInit.conf.initPlugins.timecode)
                 plugins.Add(new("{localhost}/timecode.js", 1, "Синхронизация тайм-кодов", "lampac"));
 
+            if (ModInit.conf.initPlugins.selfhosted)
+            {
+                plugins.Add(new("{localhost}/selfhost_auth.js", 1, "SelfHosted Account", "lampac"));
+                plugins.Add(new("{localhost}/selfhost_sync.js", 1, "SelfHosted Sync", "lampac"));
+                plugins.Add(new("{localhost}/selfhost_community.js", 1, "SelfHosted Community", "lampac"));
+            }
+
             if (ModInit.conf.initPlugins.bookmark)
                 plugins.Add(new("{localhost}/bookmark.js", 1, "Синхронизация закладок", "lampac"));
 
@@ -822,6 +829,13 @@ public class ApiController : BaseController
 
             if (ModInit.conf.initPlugins.timecode)
                 send("timecode", true);
+
+            if (ModInit.conf.initPlugins.selfhosted)
+            {
+                send("selfhost_auth", true);
+                send("selfhost_sync", true);
+                send("selfhost_community", true);
+            }
 
             if (ModInit.conf.initPlugins.bookmark)
                 send("bookmark", true);

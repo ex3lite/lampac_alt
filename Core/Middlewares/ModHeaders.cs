@@ -21,7 +21,7 @@ public class ModHeaders
 
         httpContext.Response.Headers["Access-Control-Allow-Credentials"] = "true";
         httpContext.Response.Headers["Access-Control-Allow-Private-Network"] = "true";
-        httpContext.Response.Headers["Access-Control-Allow-Methods"] = "POST, GET, OPTIONS";
+        httpContext.Response.Headers["Access-Control-Allow-Methods"] = "POST, GET, PUT, DELETE, PATCH, OPTIONS";
 
         if (httpContext.Request.Headers.TryGetValue("Access-Control-Request-Headers", out var allowHeaders))
             httpContext.Response.Headers["Access-Control-Allow-Headers"] = allowHeaders;

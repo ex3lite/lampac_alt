@@ -1,0 +1,8 @@
+[Unit]
+Description=Resolve TMDB through DNS-over-HTTPS for Lampac
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/update-tmdb-hosts.py

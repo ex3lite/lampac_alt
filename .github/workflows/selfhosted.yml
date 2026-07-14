@@ -1,0 +1,22 @@
+name: SelfHosted security
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+      - run: dotnet test Modules/Community/SelfHosted.Tests/SelfHosted.Tests.csproj --configuration Release
+      - name: Reject CUB from SelfHosted resources
+        shell: bash
+        run: |
+          if grep -RniE '([^/]*\.)?cub\.(watch|rip)' Modules/Community/SelfHosted Modules/LampaWeb; then
+            echo 'CUB runtime reference found'
+            exit 1
+          fi

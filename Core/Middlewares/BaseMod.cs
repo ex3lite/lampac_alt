@@ -38,7 +38,11 @@ public class BaseMod
 
         if (!HttpMethods.IsGet(context.Request.Method) &&
             !HttpMethods.IsPost(context.Request.Method))
-            return Task.CompletedTask;
+        {
+            bool selfHostedApi = context.Request.Path.StartsWithSegments("/api/v1") &&
+                (HttpMethods.IsPut(context.Request.Method) || HttpMethods.IsDelete(context.Request.Method) || HttpMethods.IsPatch(context.Request.Method));
+            if (!selfHostedApi) return Task.CompletedTask;
+        }
 
         if (!CoreInit.conf.BaseModule.ValidateRequest)
             return _next(context);

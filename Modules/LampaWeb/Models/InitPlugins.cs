@@ -35,4 +35,6 @@ public class InitPlugins
     public bool timecode { get; set; }
 
     public bool watch_together { get; set; }
+
+    public bool selfhosted { get; set; }
 }

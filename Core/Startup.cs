@@ -41,6 +41,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.RateLimiting;
 using System.Threading.Tasks;
 
 namespace Core;
@@ -232,9 +233,9 @@ public class Startup
             });
         }
 
-        if (init.listen.LimitHttpRequests > 0)
+        services.AddRateLimiter(options =>
         {
-            services.AddRateLimiter(options =>
+            if (init.listen.LimitHttpRequests > 0)
             {
                 options.AddConcurrencyLimiter("http-concurrency", limiter =>
                 {
@@ -242,14 +243,32 @@ public class Startup
                     limiter.QueueLimit = 0;
                 });
 
-                options.OnRejected = (context, token) =>
-                {
-                    context.HttpContext.Response.Headers.RetryAfter = "1";
-                    context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
-                    return ValueTask.CompletedTask;
-                };
-            });
-        }
+            }
+
+            static string ClientKey(HttpContext context) => context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            options.AddPolicy("selfhost-register", context => RateLimitPartition.GetFixedWindowLimiter(ClientKey(context), _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 5, Window = TimeSpan.FromHours(1), QueueLimit = 0, AutoReplenishment = true
+            }));
+            options.AddPolicy("selfhost-login", context => RateLimitPartition.GetFixedWindowLimiter(ClientKey(context), _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 50, Window = TimeSpan.FromHours(1), QueueLimit = 0, AutoReplenishment = true
+            }));
+            options.AddPolicy("selfhost-pair", context => RateLimitPartition.GetFixedWindowLimiter(ClientKey(context), _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 30, Window = TimeSpan.FromMinutes(10), QueueLimit = 0, AutoReplenishment = true
+            }));
+            options.AddPolicy("selfhost-community", context => RateLimitPartition.GetFixedWindowLimiter(ClientKey(context), _ => new FixedWindowRateLimiterOptions
+            {
+                PermitLimit = 30, Window = TimeSpan.FromMinutes(1), QueueLimit = 0, AutoReplenishment = true
+            }));
+            options.OnRejected = (context, token) =>
+            {
+                context.HttpContext.Response.Headers.RetryAfter = "60";
+                context.HttpContext.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+                return ValueTask.CompletedTask;
+            };
+        });
 
         services.AddMemoryCache(o =>
         {
@@ -719,8 +738,7 @@ public class Startup
         }
         #endregion
 
-        if (init.listen.LimitHttpRequests > 0)
-            app.UseRateLimiter();
+        app.UseRateLimiter();
 
         if (init.openstat.enable)
             app.UseResponseAvgStatistics();

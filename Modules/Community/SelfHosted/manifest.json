@@ -1,0 +1,13 @@
+{
+  "enable": true,
+  "dynamic": true,
+  "tree": [
+    "Controllers",
+    "Assets",
+    "GlobalUsings.cs",
+    "Models.cs",
+    "SqlContext.cs",
+    "Security.cs",
+    "ModInit.cs"
+  ]
+}

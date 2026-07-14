@@ -9,34 +9,34 @@
   window.lampa_settings.torrents_use = true;    // Показывать кнопку торрентов
   window.lampa_settings.demo = false;           // demo off
   window.lampa_settings.read_only = false;      // Режим только для чтения, без кнопок онлайн и расширений
-  window.lampa_settings.socket_use = true;      // cub - Использовать сокеты для синхронизации данных
+  window.lampa_settings.socket_use = false;     // синхронизация работает через SelfHosted
   window.lampa_settings.socket_url = undefined; // cub - Адрес сокета, по умолчанию лампа берет адреса из манифеста
-  window.lampa_settings.socket_methods = true;  // cub - Обрабатывать сообщения сокетов
-  window.lampa_settings.account_use = true;   // cub - Использовать аккаунты
-  window.lampa_settings.account_sync = true;  // cub - Синхронизировать закладки, таймкоды и прочее
-  window.lampa_settings.plugins_store = true; // cub магазин расширений
-  window.lampa_settings.feed = true;          // cub лента
+  window.lampa_settings.socket_methods = false;
+  window.lampa_settings.account_use = false;  // CUB account отключён
+  window.lampa_settings.account_sync = false; // CUB sync отключён
+  window.lampa_settings.plugins_store = false;
+  window.lampa_settings.feed = false;
   window.lampa_settings.iptv = false;         // Является ли приложение IPTV
   window.lampa_settings.white_use = false;    // Белая и пушистая лампа, для одобрения модерации
   window.lampa_settings.push_state = true;    // адрес в url /?card=1241982&media=movie 
   window.lampa_settings.lang_use = true;      // Подключить другие языки интерфейса, по умолчанию только русский и английский
   window.lampa_settings.plugins_use = true;   // Разрешить установку плагинов и расширений
   window.lampa_settings.dcma = false;         // Добавить список блокировки карточек, пример: [{"id":3566556,"cat":"movie"},...]
-  window.lampa_settings.services = true;      // Различные сервисы cub в приложении
+  window.lampa_settings.services = false;
   window.lampa_settings.youtube = true;       // Подключить YouTube API
   window.lampa_settings.geo = true;           // Определять гео по IP, иначе будет RU
-  window.lampa_settings.mirrors = true;       // Использовать поиск зеркал
+  window.lampa_settings.mirrors = false;
 
   window.lampa_settings.disable_features = window.lampa_settings.disable_features || {};
   window.lampa_settings.disable_features.dmca = true;           // шлет нахер правообладателей - on
   window.lampa_settings.disable_features.ads = true;            // Вспомогатиленые сервисы на подписку према
-  window.lampa_settings.disable_features.reactions = false;     // cub реакции
-  window.lampa_settings.disable_features.discuss = false;       // cub комментарии
-  window.lampa_settings.disable_features.ai = false;            // cub AI-поиск
-  window.lampa_settings.disable_features.install_proxy = false; // cub tmdb proxy
-  window.lampa_settings.disable_features.subscribe = false;     // cub подписки
-  window.lampa_settings.disable_features.blacklist = false;     // Черный список плагинов
-  window.lampa_settings.disable_features.persons = false;       // Подписка на актеров
+  window.lampa_settings.disable_features.reactions = true;
+  window.lampa_settings.disable_features.discuss = true;
+  window.lampa_settings.disable_features.ai = true;
+  window.lampa_settings.disable_features.install_proxy = true;
+  window.lampa_settings.disable_features.subscribe = true;
+  window.lampa_settings.disable_features.blacklist = true;
+  window.lampa_settings.disable_features.persons = true;
   window.lampa_settings.disable_features.trailers = false;      // Трейлеры
   window.lampa_settings.disable_features.lgbt = true;           // Разрешить ЛГБТ контент
 
@@ -85,10 +85,10 @@
     if (Lampa.Storage.get('lampac_initiale', 'false')) return;
 
     Lampa.Storage.set('lampac_initiale', 'true');
-    Lampa.Storage.set('source', 'cub');
+    Lampa.Storage.set('source', 'tmdb');
     Lampa.Storage.set('video_quality_default', '2160');
     Lampa.Storage.set('full_btn_priority', '{full_btn_priority_hash}');
-    Lampa.Storage.set('proxy_tmdb', '{country}' == 'RU');
+    Lampa.Storage.set('proxy_tmdb', true);
     Lampa.Storage.set('poster_size', 'w300');
 
     Lampa.Storage.set('parser_use', 'true');
