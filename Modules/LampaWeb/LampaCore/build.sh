@@ -4,6 +4,7 @@ set -euo pipefail
 root="$(cd "$(dirname "$0")" && pwd)"
 commit="$(tr -d '[:space:]' < "$root/UPSTREAM_COMMIT")"
 export SOURCE_DATE_EPOCH="$(tr -d '[:space:]' < "$root/SOURCE_DATE_EPOCH")"
+export TZ=UTC
 work="$(mktemp -d "${TMPDIR:-/tmp}/lampac-lampa-core.XXXXXX")"
 trap 'rm -rf "$work"' EXIT
 
