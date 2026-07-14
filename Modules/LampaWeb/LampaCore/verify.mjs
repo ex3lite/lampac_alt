@@ -53,7 +53,8 @@ const forbidden = [
     /selfhost_(?:auth|sync|community)\.js/i,
     /\/api\/(?:metric|remote-configuration|discuss|reactions|feed|extensions\/list|ai\/metadata)\//i,
     /source\s*:\s*['"]cub['"]/i,
-    /\.cub_domain\s*\+\s*['"]\/api\//i
+    /\.cub_domain\s*\+\s*['"]\/api\//i,
+    /\bMirrors\.(?:init|task)\s*\(/
 ]
 
 for (const pattern of forbidden) {

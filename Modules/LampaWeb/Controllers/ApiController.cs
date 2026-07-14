@@ -586,7 +586,7 @@ public class ApiController : BaseController
 
         try
         {
-            string lampainitjs = FileCache.ReadAllText($"{ModInit.modpath}/plugins/lampainit.js", "lampainit.js");
+            string lampainitjs = FileCache.ReadAllText($"{ModInit.modpath}/plugins/lampainit.js");
             if (lampainitjs.Contains("{country}"))
                 StatiCacheDisabled = true;
 

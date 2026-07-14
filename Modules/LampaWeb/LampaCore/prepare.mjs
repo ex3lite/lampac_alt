@@ -184,6 +184,8 @@ removeLines(app, [
     "    LoadingProgress.status('Broadcast init')",
     '    Theme.init()',
     "    LoadingProgress.status('Theme init')",
+    '    Mirrors.init()',
+    "    LoadingProgress.status('Mirrors init')",
     "    if(window.lampa_settings.account_use && !window.lampa_settings.disable_features.ai) Search.addSource(Ai.discovery())",
     '    ServiceDeveloper.init()',
     "    LoadingProgress.status('ServiceDeveloper init')",

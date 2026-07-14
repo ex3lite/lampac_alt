@@ -33,9 +33,10 @@
       };
 
       if (Lampa.Platform.is('android') || Lampa.Platform.is('tizen')) check(true);
+      else if ('{localhost}'.indexOf(location.host) >= 0) check(false);
       else {
         var net = new Lampa.Reguest();
-        net.silent('{localhost}'.indexOf(location.host) >= 0 ? 'https://github.com/' : '{localhost}/cors/check', function() {
+        net.silent('{localhost}/cors/check', function() {
           check(true);
         }, function() {
           check(false);
