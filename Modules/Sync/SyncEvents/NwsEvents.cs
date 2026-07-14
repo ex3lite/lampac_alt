@@ -43,7 +43,7 @@ public static class NwsEvents
         {
             case "registryevent":
                 {
-                    string uid = GetStringArg(e.args, 0);
+                    string uid = ConnectionUser(e.connectionId);
                     if (!string.IsNullOrEmpty(uid))
                         eventClients.AddOrUpdate(e.connectionId, uid, (_, __) => uid);
                     break;
@@ -53,7 +53,7 @@ public static class NwsEvents
                 {
                     if (_onlyreg)
                         break;
-                    string uid = GetStringArg(e.args, 0);
+                    string uid = ConnectionUser(e.connectionId);
                     string name = GetStringArg(e.args, 1);
                     string data = GetStringArg(e.args, 2);
                     _ = SendAsync(e.connectionId, uid, name, data);
@@ -65,10 +65,11 @@ public static class NwsEvents
                     if (_onlyreg)
                         break;
                     string targetConnection = GetStringArg(e.args, 0);
-                    string uid = GetStringArg(e.args, 1);
+                    string uid = ConnectionUser(e.connectionId);
                     string name = GetStringArg(e.args, 2);
                     string data = GetStringArg(e.args, 3);
-                    _ = SendToConnectionAsync(targetConnection, uid, name, data);
+                    if (!string.IsNullOrEmpty(uid) && uid == ConnectionUser(targetConnection))
+                        _ = SendToConnectionAsync(targetConnection, uid, name, data);
                     break;
                 }
         }
@@ -100,6 +101,15 @@ public static class NwsEvents
             return Task.CompletedTask;
 
         return Startup.Nws.SendAsync(connectionId, "event", uid ?? string.Empty, name, data ?? string.Empty);
+    }
+
+    static string ConnectionUser(string connectionId)
+    {
+        if (string.IsNullOrEmpty(connectionId)
+            || !Startup.Nws.AllConnections().TryGetValue(connectionId, out var connection))
+            return null;
+
+        return connection.RequestInfo?.user_uid;
     }
 
     static string GetStringArg(JsonElement args, int index)

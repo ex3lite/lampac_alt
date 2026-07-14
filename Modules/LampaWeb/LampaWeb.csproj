@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <OutputType>library</OutputType>
     <IsPackable>true</IsPackable>
+    <Nullable>annotations</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,7 +12,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="LampaCore\package-lock.json" />
     <Content Update="plugins\extensions.json">
+      <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+    </Content>
+    <Content Include="LampaCore\dist\app.min.js">
       <CopyToPublishDirectory>Always</CopyToPublishDirectory>
     </Content>
   </ItemGroup>

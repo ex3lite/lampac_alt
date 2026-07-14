@@ -43,8 +43,6 @@
     <Project Path="Modules/Adult/XvideosRED/XvideosRED.csproj" />
   </Folder>
   <Folder Name="/Modules/Community/">
-    <Project Path="Modules/Community/SelfHosted/SelfHosted.csproj" />
-    <Project Path="Modules/Community/SelfHosted.Tests/SelfHosted.Tests.csproj" />
     <Project Path="Modules/Community/TelegramAuth/TelegramAuth.csproj" />
     <Project Path="Modules/Community/TelegramAuthBot/TelegramAuthBot.csproj" />
     <Project Path="Modules/Tg-notify.bot/Tg-notify.bot.csproj" />
@@ -134,9 +132,11 @@
   <Folder Name="/Modules/Proxy/">
     <Project Path="Modules/Proxy/Corseu/Corseu.csproj" />
     <Project Path="Modules/Proxy/CorsMedia/CorsMedia.csproj" />
-    <Project Path="Modules/Proxy/CubProxy/CubProxy.csproj" />
     <Project Path="Modules/Proxy/ProxyLimiter/ProxyLimiter.csproj" />
     <Project Path="Modules/Proxy/TmdbProxy/TmdbProxy.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Modules/LampaWeb.Tests/LampaWeb.Tests.csproj" />
   </Folder>
   <Folder Name="/Modules/Sync/">
     <Project Path="Modules/Sync/Storage/Storage.csproj" />

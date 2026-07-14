@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Lampa — аккаунт</title>
+  <style>
+    :root{color-scheme:dark;--bg:#0b0d10;--card:#15181d;--muted:#9299a5;--line:#292e36;--accent:#f4f5f7;--danger:#ff6b6b}*{box-sizing:border-box}
+    body{margin:0;background:radial-gradient(circle at 20% 0,#20242b 0,var(--bg) 42%);color:#fff;font:16px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+    main{width:min(920px,100%);margin:auto;padding:clamp(22px,5vw,64px)}h1{font-size:clamp(34px,7vw,68px);line-height:1;margin:0 0 12px}p{color:var(--muted)}
+    .card{background:rgba(21,24,29,.94);border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,36px);box-shadow:0 24px 80px #0008}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}.full{grid-column:1/-1}
+    label{display:grid;gap:7px;color:#cbd0d8;font-size:14px}input{width:100%;border:1px solid var(--line);background:#0d0f13;color:#fff;border-radius:14px;padding:14px 16px;font:inherit;outline:none}input:focus{border-color:#747e8d}
+    button,a.button{border:0;border-radius:14px;padding:14px 18px;background:var(--accent);color:#0b0d10;font-weight:750;font:inherit;cursor:pointer;text-decoration:none;display:inline-flex;justify-content:center}.secondary{background:#272c34!important;color:#fff!important}.danger{background:#3b1d22!important;color:#ffb8bd!important}.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.hidden{display:none!important}.notice{padding:12px 14px;border-radius:12px;background:#242932;margin:14px 0}.error{background:#3a1b20;color:#ffb6bc}.session{padding:14px 0;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:16px}.session small{color:var(--muted)}
+    .pair{display:grid;grid-template-columns:1fr minmax(220px,300px);gap:28px;align-items:center;margin-bottom:18px}.qr{background:#fff;border-radius:18px;padding:12px}.qr svg{display:block;width:100%;height:auto}.code{font:800 clamp(28px,6vw,50px)/1 monospace;letter-spacing:.14em;color:#fff}.short-code{max-width:220px;letter-spacing:.16em;font-family:monospace}
+    @media(max-width:650px){.grid,.pair{grid-template-columns:1fr}.full{grid-column:auto}.card{border-radius:18px}.qr{max-width:260px}}
+  </style>
+</head>
+<body><main><h1>Аккаунт Lampa</h1><p>Один вход для телевизора, телефона и браузера.</p>
+  <section id="tv-pair" class="card pair hidden">
+    <div><h2>Войти на телевизоре</h2><p>Отсканируйте QR-код телефоном и войдите или зарегистрируйтесь. Телевизор откроет Lampa автоматически.</p><div id="tv-code" class="code"></div><div id="tv-status" class="notice hidden" role="status"></div><button id="refresh-pair" class="secondary hidden">Получить новый код</button></div>
+    <div id="tv-qr" class="qr"></div>
+  </section>
+  <section id="auth" class="card">
+    <div id="message" class="notice hidden"></div>
+    <div class="grid">
+      <label class="full">Email<input id="email" type="email" autocomplete="email" maxlength="254"></label>
+      <label id="nick-row">Публичный ник<input id="nickname" autocomplete="nickname" maxlength="40"></label>
+      <label>Пароль<input id="password" type="password" autocomplete="current-password" minlength="12" maxlength="128"></label>
+    </div>
+    <div class="actions"><button id="login">Войти</button><button id="register" class="secondary">Зарегистрироваться</button></div>
+    <details><summary>Есть одноразовый reset-код</summary><label>Reset-код<input id="reset-code" autocomplete="one-time-code"></label><button id="reset" class="secondary">Установить введённый пароль</button></details>
+  </section>
+  <section id="profile" class="card hidden">
+    <h2 id="who"></h2><p id="email-view"></p><div id="pair-result" class="notice hidden"></div>
+    <h3>Подключить телевизор</h3><p>Введите шестизначный код, который показан на телевизоре.</p><div class="actions"><input id="pair-code" class="short-code" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" autocomplete="one-time-code" placeholder="000000"><button id="claim-code" class="secondary">Подключить</button></div>
+    <div class="actions"><a class="button secondary" href="/">Открыть Lampa</a><a id="admin-link" class="button secondary hidden" href="/account/admin/">Админка</a><button id="logout" class="danger">Выйти</button><button id="logout-all" class="danger">Выйти везде</button></div>
+    <h3>Устройства</h3><div id="sessions"></div>
+    <h3>Безопасность</h3><div class="grid"><label>Текущий пароль<input id="current-password" type="password" autocomplete="current-password"></label><label>Новый пароль<input id="new-password" type="password" autocomplete="new-password" minlength="12" maxlength="128"></label></div><div class="actions"><button id="change-password" class="secondary">Сменить пароль</button></div>
+    <h3>Резервная копия</h3><p>Экспорт содержит синхронизируемые данные, но не пароли, токены и сессии.</p><div class="actions"><a class="button secondary" href="/api/v1/backup/export">Скачать backup</a><input id="backup-file" type="file" accept="application/json,.json"><button id="preview-backup" class="secondary">Проверить</button><button id="import-backup" class="secondary" disabled>Импортировать</button></div><div id="backup-result" class="notice hidden"></div>
+    <h3>Удаление аккаунта</h3><p>Аккаунт немедленно блокируется и окончательно удаляется через 30 дней.</p><button id="delete-account" class="danger">Удалить аккаунт</button>
+  </section>
+  <footer><p><a href="https://www.themoviedb.org"><img src="/account/tmdb-logo.svg" alt="TMDB" style="width:180px;max-width:45vw;height:auto"></a></p><p>This product uses the TMDB API but is not endorsed or certified by TMDB.</p></footer>
+</main>
+<script>
+const PAIR_SECRET="__PAIR_SECRET__",GATE=new URLSearchParams(location.search).has('gate');let csrf='',pairingActive=false,pairingRun=0,pendingBackup=null;const $=s=>document.querySelector(s);
+async function api(path,options={}){options.credentials='same-origin';options.headers=Object.assign({'Content-Type':'application/json'},options.headers||{});if(csrf)options.headers['X-CSRF-Token']=csrf;const r=await fetch(path,options);let j={};try{j=await r.json()}catch(e){}if(!r.ok)throw new Error(j.message||'Ошибка запроса');return j.data}
+function msg(text,error=false){const e=$('#message');e.textContent=text;e.className='notice'+(error?' error':'')}
+function pairResult(text,error=false){const e=$('#pair-result');e.textContent=text;e.className='notice'+(error?' error':'')}
+function pairStatus(text,error=false){const e=$('#tv-status');e.textContent=text;e.className='notice'+(error?' error':'')}
+function backupResult(text,error=false){const e=$('#backup-result');e.textContent=text;e.className='notice'+(error?' error':'')}
+async function claim(code=''){if(!PAIR_SECRET&&!code)return;const body=PAIR_SECRET?{claimSecret:PAIR_SECRET}:{code};const d=await api('/api/v1/auth/pairings/claim',{method:'POST',body:JSON.stringify(body)});pairResult('Устройство «'+d.deviceName+'» авторизовано.')}
+async function show(user){pairingActive=false;pairingRun++;if(GATE&&!PAIR_SECRET)return location.replace('/');$('#auth').classList.add('hidden');$('#tv-pair').classList.add('hidden');$('#profile').classList.remove('hidden');$('#who').textContent=user.nickname;$('#email-view').textContent=user.email;if(user.role==='admin')$('#admin-link').classList.remove('hidden');if(PAIR_SECRET)try{await claim()}catch(e){pairResult(e.message,true)}await sessions()}
+async function waitPairing(pairing,run){while(pairingActive&&run===pairingRun){try{const r=await fetch('/api/v1/auth/pairings/'+pairing.pairingId+'/wait',{credentials:'same-origin',headers:{'X-Pair-Token':pairing.tvSecret}});if(!pairingActive||run!==pairingRun)return;if(r.status===204)continue;let j={};try{j=await r.json()}catch(e){}if(r.ok&&j.data&&j.data.authorized)return location.replace('/');if(r.status===404||r.status===410||(r.status>=400&&r.status<500&&r.status!==429)){pairingActive=false;pairStatus(j.message||'QR-вход завершён. Получите новый код.',true);$('#refresh-pair').classList.remove('hidden');return}await new Promise(resolve=>setTimeout(resolve,1200))}catch(e){if(pairingActive&&run===pairingRun)await new Promise(resolve=>setTimeout(resolve,1200))}}}
+async function startPairing(){const run=++pairingRun;pairingActive=false;$('#refresh-pair').classList.add('hidden');$('#tv-status').classList.add('hidden');try{const pairing=await api('/api/v1/auth/pairings',{method:'POST',body:JSON.stringify({deviceName:navigator.userAgent.slice(0,80)})});if(run!==pairingRun)return;$('#tv-code').textContent=pairing.code;$('#tv-qr').innerHTML=pairing.qrSvg;$('#tv-pair').classList.remove('hidden');pairingActive=true;waitPairing(pairing,run)}catch(e){pairStatus(e.message,true);$('#tv-pair').classList.remove('hidden');$('#refresh-pair').classList.remove('hidden')}}
+async function sessions(){const rows=await api('/api/v1/account/sessions');const box=$('#sessions');box.textContent='';rows.forEach(x=>{const row=document.createElement('div');row.className='session';const info=document.createElement('div');info.textContent=x.deviceName+(x.current?' · это устройство':'');const sub=document.createElement('small');sub.textContent='Последняя активность: '+new Date(x.lastSeenAt).toLocaleString();info.appendChild(document.createElement('br'));info.appendChild(sub);row.appendChild(info);const actions=document.createElement('div');const rename=document.createElement('button');rename.className='secondary';rename.textContent='Переименовать';rename.onclick=async()=>{const name=prompt('Название устройства',x.deviceName);if(name){await api('/api/v1/account/sessions/'+x.id,{method:'PATCH',body:JSON.stringify({deviceName:name})});sessions()}};actions.appendChild(rename);if(!x.current){const b=document.createElement('button');b.className='secondary';b.textContent='Отключить';b.onclick=async()=>{await api('/api/v1/account/sessions/'+x.id,{method:'DELETE'});sessions()};actions.appendChild(b)}row.appendChild(actions);box.appendChild(row)})}
+async function authenticate(kind){try{const payload={email:$('#email').value,password:$('#password').value,deviceName:navigator.userAgent.slice(0,80)};if(kind==='register')payload.nickname=$('#nickname').value;const d=await api('/api/v1/auth/'+kind,{method:'POST',body:JSON.stringify(payload)});csrf=d.csrfToken;await show(d.user)}catch(e){msg(e.message,true)}}
+$('#login').onclick=()=>authenticate('login');$('#register').onclick=()=>authenticate('register');$('#logout').onclick=async()=>{await api('/api/v1/auth/logout',{method:'POST'});location.reload()};
+$('#logout-all').onclick=async()=>{await api('/api/v1/account/sessions',{method:'DELETE'});location.reload()};
+$('#refresh-pair').onclick=startPairing;
+$('#pair-code').oninput=e=>e.target.value=e.target.value.replace(/\D/g,'').slice(0,6);
+$('#claim-code').onclick=async()=>{const code=$('#pair-code').value;if(!/^[0-9]{6}$/.test(code))return pairResult('Введите 6 цифр с экрана телевизора.',true);try{await claim(code);$('#pair-code').value=''}catch(e){pairResult(e.message,true)}};
+$('#reset').onclick=async()=>{try{await api('/api/v1/auth/reset',{method:'POST',body:JSON.stringify({token:$('#reset-code').value,newPassword:$('#password').value})});msg('Пароль изменён. Теперь войдите.')}catch(e){msg(e.message,true)}};
+$('#change-password').onclick=async()=>{try{await api('/api/v1/account/password',{method:'POST',body:JSON.stringify({currentPassword:$('#current-password').value,newPassword:$('#new-password').value})});location.replace('/account/?gate=1')}catch(e){pairResult(e.message,true)}};
+async function readBackup(){const file=$('#backup-file').files[0];if(!file)throw Error('Выберите JSON-файл');if(file.size>10*1024*1024)throw Error('Файл превышает 10 МБ');return JSON.parse(await file.text())}
+$('#preview-backup').onclick=async()=>{try{pendingBackup=await readBackup();const d=await api('/api/v1/backup/import/preview',{method:'POST',body:JSON.stringify(pendingBackup)});backupResult('Проверено: '+d.items+' элементов, '+d.bytes+' байт.');$('#import-backup').disabled=false}catch(e){pendingBackup=null;$('#import-backup').disabled=true;backupResult(e.message,true)}};
+$('#import-backup').onclick=async()=>{if(!pendingBackup||!confirm('Заменить серверные данные содержимым backup?'))return;try{const d=await api('/api/v1/backup/import',{method:'POST',body:JSON.stringify(pendingBackup)});backupResult('Импортировано: '+d.imported+' элементов.');$('#import-backup').disabled=true}catch(e){backupResult(e.message,true)}};
+$('#delete-account').onclick=async()=>{if(prompt('Для удаления введите УДАЛИТЬ')!=='УДАЛИТЬ')return;try{await api('/api/v1/account',{method:'DELETE'});location.replace('/account/?gate=1')}catch(e){pairResult(e.message,true)}};
+api('/api/v1/auth/me').then(d=>{csrf=d.csrfToken;show(d.user)}).catch(()=>{$('#auth').classList.remove('hidden');if(GATE)startPairing()});
+</script></body></html>

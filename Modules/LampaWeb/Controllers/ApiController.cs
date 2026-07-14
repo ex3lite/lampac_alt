@@ -22,6 +22,10 @@ namespace LampaWeb;
 
 public class ApiController : BaseController
 {
+    static readonly object lampaCoreLock = new();
+    static long lampaCoreStamp;
+    static string lampaCoreBundle = string.Empty;
+
     [HttpGet, AllowAnonymous]
     [Route("/personal.lampa")]
     [Route("/lampa-main/personal.lampa")]
@@ -132,7 +136,6 @@ public class ApiController : BaseController
 
     #region app.min.js
     [HttpGet, AllowAnonymous]
-    [Staticache(20, always: true)]
     [Route("/app.min.js")]
     [Route("{type}/app.min.js")]
     public ActionResult LampaApp(string type)
@@ -156,7 +159,25 @@ public class ApiController : BaseController
             type = Regex.Replace(type, "[^a-z0-9\\-]", "");
         }
 
-        string file = IO.File.ReadAllText($"wwwroot/{type}/app.min.js");
+        string bundlePath = Path.Combine(ModInit.modpath, "LampaCore", "dist", "app.min.js");
+        var bundleInfo = new FileInfo(bundlePath);
+
+        if (!bundleInfo.Exists)
+            return StatusCode(503, "LampaCore bundle is missing");
+
+        long stamp = bundleInfo.LastWriteTimeUtc.Ticks ^ bundleInfo.Length;
+        string file;
+
+        lock (lampaCoreLock)
+        {
+            if (lampaCoreStamp != stamp)
+            {
+                lampaCoreBundle = IO.File.ReadAllText(bundlePath);
+                lampaCoreStamp = stamp;
+            }
+
+            file = lampaCoreBundle;
+        }
 
         #region appReplace
         if (ModInit.conf.appReplace != null)
@@ -175,45 +196,20 @@ public class ApiController : BaseController
         }
         #endregion
 
-        var bulder = new StringBuilder();
-        bulder = bulder.Append(file);
-
-        if (ModInit.conf.initPlugins.cubProxy)
-        {
-            bulder = bulder.Replace("protocol + mirror + '/api/checker'", $"'{host}/cub/api/checker'");
-
-            string utlprotocol = file.Contains("Utils$1.protocol()") ?
-                "Utils$1.protocol()" :
-                "Utils$2.protocol()";
-
-            bulder = bulder.Replace($"{utlprotocol} + 'tmdb.' + object$2.cub_domain + '/' + u,", $"'{host}/cub/tmdb./' + u,");
-            bulder = bulder.Replace($"{utlprotocol} + object$2.cub_domain", $"'{host}/cub/red'");
-            bulder = bulder.Replace("object$2.cub_domain", $"'{CoreInit.conf.cub.mirror}'");
-        }
-
-        bulder = bulder.Replace("http://lite.lampa.mx", $"{host}/{type}");
-        bulder = bulder.Replace("https://yumata.github.io/lampa-lite", $"{host}/{type}");
-
-        bulder = bulder.Replace("http://lampa.mx", $"{host}/{type}");
-        bulder = bulder.Replace("https://yumata.github.io/lampa", $"{host}/{type}");
-
-        bulder = bulder.Replace("window.lampa_settings.dcma = dcma;", "window.lampa_settings.fixdcma = true;");
-        bulder = bulder.Replace("Storage.get('vpn_checked_ready', 'false')", "true");
-
-        bulder = bulder.Replace("status$1 = false;", "status$1 = true;"); // local apk to personal.lampa
-        bulder = bulder.Replace("return status$1;", "return true;"); // отключение рекламы
-        bulder = bulder.Replace("if (!Storage.get('metric_uid', ''))", "return;"); // metric
-        bulder = bulder.Replace("function log(data) {", "function log(data) { return;");
-        bulder = bulder.Replace("function stat$1(method, name) {", "function stat$1(method, name) { return;");
-        bulder = bulder.Replace("if (domain) {", "if (false) {");
-
-        bulder = bulder.Replace("{localhost}", host);
+        var bulder = new StringBuilder(file);
 
         if (EventListener.AppReplace != null)
         {
             foreach (Func<string, EventAppReplace, StringBuilder> handler in EventListener.AppReplace.GetInvocationList())
                 bulder = handler.Invoke("appjs", new EventAppReplace(bulder, null, type, host, requestInfo, HttpContext.Request));
         }
+
+        string etag = $"\"{stamp:x}\"";
+        Response.Headers.ETag = etag;
+        Response.Headers.CacheControl = "no-cache, must-revalidate";
+
+        if (Request.Headers.IfNoneMatch.ToString() == etag)
+            return StatusCode(304);
 
         return ContentTo(bulder, "application/javascript; charset=utf-8");
     }
@@ -306,7 +302,7 @@ public class ApiController : BaseController
         if (!ModInit.conf.widgets.samsung)
             return NotFound();
 
-        string cache = $"cache/widgets/samsung/{Shared.Services.Utilities.CrypTo.md5(overwritehost ?? host + "v4")}";
+        string cache = $"cache/widgets/samsung/{Shared.Services.Utilities.CrypTo.md5(overwritehost ?? host + "v5-auth-gate")}";
         string wgt = $"{cache}.wgt";
 
         if (IO.File.Exists(wgt))
@@ -386,7 +382,7 @@ public class ApiController : BaseController
         if (!ModInit.conf.widgets.lg)
             return NotFound();
 
-        string cache = $"cache/widgets/lg/{Shared.Services.Utilities.CrypTo.md5(overwritehost ?? host + "v01")}";
+        string cache = $"cache/widgets/lg/{Shared.Services.Utilities.CrypTo.md5(overwritehost ?? host + "v02-auth-gate")}";
         string ipk = $"{cache}.ipk";
 
         if (IO.File.Exists(ipk))
@@ -611,9 +607,6 @@ public class ApiController : BaseController
             if (ModInit.conf.initPlugins.tmdbProxy)
                 plugins.Add(new("{localhost}/tmdbproxy.js", 1, "TMDB Proxy", "lampac"));
 
-            if (ModInit.conf.initPlugins.cubProxy)
-                plugins.Add(new("{localhost}/cubproxy.js", 1, "CUB Proxy", "lampac"));
-
             if (ModInit.conf.initPlugins.online)
                 plugins.Add(new("{localhost}/online.js", 1, "Онлайн", "lampac"));
 
@@ -637,13 +630,6 @@ public class ApiController : BaseController
 
             if (ModInit.conf.initPlugins.timecode)
                 plugins.Add(new("{localhost}/timecode.js", 1, "Синхронизация тайм-кодов", "lampac"));
-
-            if (ModInit.conf.initPlugins.selfhosted)
-            {
-                plugins.Add(new("{localhost}/selfhost_auth.js", 1, "SelfHosted Account", "lampac"));
-                plugins.Add(new("{localhost}/selfhost_sync.js", 1, "SelfHosted Sync", "lampac"));
-                plugins.Add(new("{localhost}/selfhost_community.js", 1, "SelfHosted Community", "lampac"));
-            }
 
             if (ModInit.conf.initPlugins.bookmark)
                 plugins.Add(new("{localhost}/bookmark.js", 1, "Синхронизация закладок", "lampac"));
@@ -806,9 +792,6 @@ public class ApiController : BaseController
             if (ModInit.conf.initPlugins.tmdbProxy)
                 send("tmdbproxy", true);
 
-            if (ModInit.conf.initPlugins.cubProxy)
-                send("cubproxy", true);
-
             if (ModInit.conf.initPlugins.dorama)
                 send("dorama", true);
 
@@ -829,13 +812,6 @@ public class ApiController : BaseController
 
             if (ModInit.conf.initPlugins.timecode)
                 send("timecode", true);
-
-            if (ModInit.conf.initPlugins.selfhosted)
-            {
-                send("selfhost_auth", true);
-                send("selfhost_sync", true);
-                send("selfhost_community", true);
-            }
 
             if (ModInit.conf.initPlugins.bookmark)
                 send("bookmark", true);

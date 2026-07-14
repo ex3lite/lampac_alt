@@ -37,6 +37,7 @@ using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using System.Runtime;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
@@ -246,6 +247,12 @@ public class Startup
             }
 
             static string ClientKey(HttpContext context) => context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+            static string SessionKey(HttpContext context)
+            {
+                if (!context.Request.Cookies.TryGetValue("lampac_session", out string token) || string.IsNullOrEmpty(token))
+                    return ClientKey(context);
+                return Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(token)));
+            }
             options.AddPolicy("selfhost-register", context => RateLimitPartition.GetFixedWindowLimiter(ClientKey(context), _ => new FixedWindowRateLimiterOptions
             {
                 PermitLimit = 5,
@@ -267,7 +274,7 @@ public class Startup
                 QueueLimit = 0,
                 AutoReplenishment = true
             }));
-            options.AddPolicy("selfhost-community", context => RateLimitPartition.GetFixedWindowLimiter(ClientKey(context), _ => new FixedWindowRateLimiterOptions
+            options.AddPolicy("selfhost-community", context => RateLimitPartition.GetFixedWindowLimiter(SessionKey(context), _ => new FixedWindowRateLimiterOptions
             {
                 PermitLimit = 30,
                 Window = TimeSpan.FromMinutes(1),
@@ -654,22 +661,10 @@ public class Startup
         app.UseModHeaders();
         app.UseRequestInfo();
 
-        if (mods.nws)
-        {
-            app.Map("/nws", nwsApp =>
-            {
-                nwsApp.UseWAF();
-                nwsApp.UseWebSockets();
-                nwsApp.Run(NativeWebSocket.HandleWebSocketAsync);
-            });
-        }
-
         app.UseRouting();
 
         if (init.listen.compression)
             app.UseResponseCompression();
-
-        app.UseStaticache();
 
         if (midd.anonymousRequest)
             app.UseAnonymousRequest();
@@ -681,6 +676,20 @@ public class Startup
         if (EventListener.MiddlewareAsync != null)
             app.UseModuleAsync(first: true);
         #endregion
+
+        // WebSocket identity must pass through the same mandatory account gate as HTTP.
+        if (mods.nws)
+        {
+            app.Map("/nws", nwsApp =>
+            {
+                nwsApp.UseWAF();
+                nwsApp.UseWebSockets();
+                nwsApp.Run(NativeWebSocket.HandleWebSocketAsync);
+            });
+        }
+
+        // Authentication gates registered by modules must run before response cache.
+        app.UseStaticache();
 
         #region UseOverrideResponse
         if (CoreInit.conf.overrideResponse?.Count > 0)
@@ -913,6 +922,8 @@ public class Startup
             services = serviceCollection,
             app = app ?? _app
         });
+
+        mod.loadedInstance = initInstance;
     }
     #endregion
 
@@ -921,18 +932,8 @@ public class Startup
     {
         void Dispose(RootModule mod)
         {
-            // Ищем тип, который реализует IModuleLoaded
-            var initType = mod.assembly.GetTypes()
-                .FirstOrDefault(t => typeof(IModuleLoaded).IsAssignableFrom(t) && !t.IsAbstract && t.IsClass);
-
-            if (initType == null)
-                return; // или лог
-
-            // Создаем экземпляр
-            if (Activator.CreateInstance(initType) is not IModuleLoaded initInstance)
-                return;
-
-            initInstance.Dispose();
+            mod.loadedInstance?.Dispose();
+            mod.loadedInstance = null;
         }
 
         if (module != null)

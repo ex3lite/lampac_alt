@@ -14,8 +14,6 @@ public class InitPlugins
 
     public bool tmdbProxy { get; set; }
 
-    public bool cubProxy { get; set; }
-
     public bool online { get; set; }
 
     public bool catalog { get; set; }
@@ -36,5 +34,4 @@ public class InitPlugins
 
     public bool watch_together { get; set; }
 
-    public bool selfhosted { get; set; }
 }

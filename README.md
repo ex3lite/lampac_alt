@@ -463,7 +463,7 @@ cd publish && dotnet Core.dll
     "initPlugins": {
       "online": true, "sisi": true, "torrserver": true,
       "timecode": true, "jacred": true, "tmdbProxy": true,
-      "cubProxy": true, "pirate_store": true
+      "pirate_store": true
     }
   },
 
@@ -531,12 +531,11 @@ cd publish && dotnet Core.dll
 | --- | :---: | --- |
 | **Online** | ✅ | VOD-ядро: плагин `/online.js`, агрегатор `/lite/*`. Провайдеры в `Modules/Online*/`. WAF: 10 req/s. [README](Online/README.md) |
 | **SISI** | ✅ | 18+: плагин `/sisi.js`, SQLite (история, закладки). Платформы в `Modules/Adult/*`. [README](SISI/README.md) |
-| **LampaWeb** | ✅ | Хостинг Lampa UI. Виджеты `/samsung.wgt`, `/lg.ipk`. Авто-обновление с GitHub каждые 90 мин. [README](Modules/LampaWeb/README.md) |
+| **LampaWeb** | ✅ | Хостинг Lampa UI со встроенной обязательной SelfHosted-авторизацией. Виджеты `/samsung.wgt`, `/lg.ipk`. [README](Modules/LampaWeb/README.md) |
 | **TorrServer** | ✅ | Управление процессом TorrServer, прокси `/ts/`. Случайный пароль за сессию. |
 | **JacRed** | ✅ | Агрегатор торрент-индексаторов (Rutor, Kinozal, RuTracker, NNMClub, Toloka, Bitru и др.). |
 | **NextHUB** | ✅ | 18+ витрина на YAML (`Modules/NextHUB/sites/`). Маршрут `/nexthub`. WAF: 5 req/s. [README](Modules/NextHUB/README.md) |
 | **TmdbProxy** | ✅ | Локальный кеш TMDB API (`cache/tmdb/`). |
-| **CubProxy** | ✅ | HTTP/HTTPS прокси с файловым кешем (`cache/cub/`). |
 | **TimeCode** | ✅ | Сохранение и восстановление позиции воспроизведения. SQLite. |
 | **Kit** | ✅ | Шифрование потоков (CryptoKit), конфиг `kit` в `init.conf`. |
 | **PidTor** | ✅ | Источник PidTor, маршрут `/lite/pidtor`. |
@@ -816,7 +815,7 @@ cd publish && dotnet Core.dll
 │  └─────────┘ └─────────┘ └──────────┘ └───────────────────┘     │
 │  ┌─────────┐ ┌─────────┐ ┌──────────┐ ┌───────────────────┐     │
 │  │TmdbProxy│ │  Sync   │ │ TimeCode │ │     Tracks        │     │
-│  │CubProxy │ │ WebLog  │ │ NextHUB  │ │  AdminPanel, Kit  │     │
+│  │SelfHost │ │ WebLog  │ │ NextHUB  │ │  AdminPanel, Kit  │     │
 │  └─────────┘ └─────────┘ └──────────┘ └───────────────────┘     │
 │  ┌───────────────────────────────────────────────────────────┐  │
 │  │  Modules/OnlineRUS · OnlinePaid · OnlineAnime · OnlineENG │  │
@@ -940,7 +939,7 @@ lampac/
 │   ├── OnlineRUS/              # 21 российский CDN
 │   ├── OnlineUKR/              # 8 украинских источников
 │   ├── PidTor/                 # PidTor источник
-│   ├── Proxy/                  # CubProxy, TmdbProxy, CacheMedia, CorsMedia, Corseu, ProxyLimiter
+│   ├── Proxy/                  # TmdbProxy, CacheMedia, CorsMedia, Corseu, ProxyLimiter
 │   ├── Sync/                   # Sync, SyncEvents, Storage, TimeCode
 │   ├── TorrServer/             # Управление TorrServer
 │   ├── Tg-notify.bot/          # Telegram-уведомления о сериях/озвучках

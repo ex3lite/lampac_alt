@@ -39,7 +39,7 @@ public static class ConfigSectionGroups
         new("client", "Клиент Lampa и API", "Оболочка Lampa, cookie, PidTor, TMDB.",
             new[] { "tmdb", "LampaWeb", "Cookie", "PidTor" }),
         new("modules", "Модули расширения", "Секции подключаемых модулей в корне конфига.",
-            new[] { "Catalog", "DLNA", "JacRed", "Sync", "TimeCode", "TorrServer", "Tracks", "transcoding", "TmdbProxy", "CubProxy", "WebLog" }),
+            new[] { "Catalog", "DLNA", "JacRed", "Sync", "TimeCode", "TorrServer", "Tracks", "transcoding", "TmdbProxy", "WebLog" }),
 
         new("src-anime", "Источники · аниме", "Онлайн-балансеры аниме и смежные (в т.ч. Kodik).",
             new[] { "AniLiberty", "AniLibria", "Animebesst", "AnimeGo", "AnimeLib", "AnimeON", "Animevost", "AniMedia", "Dreamerscast", "Kodik", "Mikai", "MoonAnime" }),

@@ -1,6 +1,8 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
 
+using Shared.Models.Module.Interfaces;
+
 namespace Shared.Models.Module;
 
 public class RootModule
@@ -23,4 +25,6 @@ public class RootModule
     public Assembly assembly { get; set; }
 
     public AssemblyLoadContext assemblyLoadContext { get; set; }
+
+    public IModuleLoaded loadedInstance { get; set; }
 }

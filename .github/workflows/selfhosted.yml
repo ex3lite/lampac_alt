@@ -12,11 +12,25 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
-      - run: dotnet test Modules/Community/SelfHosted.Tests/SelfHosted.Tests.csproj --configuration Release
-      - name: Reject CUB from SelfHosted resources
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: Modules/LampaWeb/LampaCore/package-lock.json
+      - run: dotnet test Modules/LampaWeb.Tests/LampaWeb.Tests.csproj --configuration Release
+      - name: Reproduce pinned LampaCore bundle
+        run: ./Modules/LampaWeb/LampaCore/build.sh --check
+      - name: Reject CUB from served resources and legacy runtime defaults
         shell: bash
         run: |
-          if grep -RniE '([^/]*\.)?cub\.(watch|rip)' Modules/Community/SelfHosted Modules/LampaWeb; then
-            echo 'CUB runtime reference found'
+          if grep -RniE '([^/]*\.)?cub\.(watch|red|rip)|cubproxy\.js|selfhost_(auth|sync|community)\.js' \
+            Core/wwwroot \
+            Modules/LampaWeb/LampaCore/dist \
+            Modules/LampaWeb/SelfHosted/Assets \
+            Modules/LampaWeb/plugins \
+            Modules/LampaWeb/widgets \
+            Modules/ForkPlayerXML/Controllers/CubController.cs \
+            Shared/CoreInit.cs; then
+            echo 'External CUB or legacy SelfHosted plugin reference found'
             exit 1
           fi

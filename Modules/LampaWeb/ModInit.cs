@@ -4,34 +4,50 @@ using Shared.Models.Events;
 using Shared.Models.Module;
 using Shared.Models.Module.Interfaces;
 using Shared.Services;
+using SelfHosted;
 using System;
 using System.Collections.Generic;
 
 namespace LampaWeb;
 
-public class ModInit : IModuleLoaded
+public class ModInit : IModuleLoaded, IModuleConfigure
 {
     public static string modpath;
 
     public static ModuleConf conf;
+
+    readonly SelfHostedRuntime selfHosted = new();
+
+    public void Configure(ConfigureModel app) => SelfHostedRuntime.Configure(app);
 
     public void Loaded(InitspaceModel baseconf)
     {
         modpath = baseconf.path;
 
         updateConf();
-        EventListener.UpdateInitFile += updateConf;
-        EventListener.Accsdb += accsdbEvent;
-
         foreach (var m in conf.limit_map)
             CoreInit.conf.WAF.limit_map.Insert(0, m);
 
-        LampaCron.Start();
+        selfHosted.Start(baseconf);
+        try
+        {
+            EventListener.UpdateInitFile += updateConf;
+            EventListener.Accsdb += accsdbEvent;
+            LampaCron.Start();
+        }
+        catch
+        {
+            EventListener.UpdateInitFile -= updateConf;
+            EventListener.Accsdb -= accsdbEvent;
+            selfHosted.Dispose();
+            throw;
+        }
     }
 
     public void Dispose()
     {
         LampaCron.Stop();
+        selfHosted.Dispose();
         EventListener.UpdateInitFile -= updateConf;
         EventListener.Accsdb -= accsdbEvent;
     }

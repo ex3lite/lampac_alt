@@ -4,6 +4,7 @@
   "tree": [
     "Controllers",
     "Models",
+    "SelfHosted",
     "Services",
     "ModInit.cs"
   ]

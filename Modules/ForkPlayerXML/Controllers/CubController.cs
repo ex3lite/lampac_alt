@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using Shared;
+using Shared.Models.Base;
 using Shared.Services;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,16 @@ public class CubController : BaseController
     [Route("fxml/cub")]
     async public Task<ActionResult> Index(string search, string cat, string sort, int without_genres, int genre, int page = 1)
     {
+        cat = cat == "tv" ? "tv" : "movie";
+        page = Math.Max(page, 1);
         string memkey = $"forkxml:list:{search}:{cat}:{sort}:{without_genres}:{genre}:{page}";
 
         if (!memoryCache.TryGetValue(memkey, out TmdbList cache))
         {
-            var root = await Http.Get<TmdbList>("http://tmdb.cub.red/" + $"?query={HttpUtility.UrlEncode(search)}&cat={cat}&sort={sort}&without_genres={without_genres}&genre={genre}&page={page}&results=60");
+            var root = await Http.Get<TmdbList>(
+                TmdbUrl(search, cat, sort, without_genres, genre, page),
+                timeoutSeconds: 15,
+                headers: HeadersModel.Init("lcrqpasswd", CoreInit.rootPasswd));
             if (root?.results == null || root.results.Count == 0)
                 return BadRequest();
 
@@ -45,7 +51,7 @@ public class CubController : BaseController
                 title = title ?? original_title,
                 description = Utilities.Description(movie, end_title),
                 logo_30x30 = Icon.Folder,
-                playlist_url = $"{host}/lite/events?id={movie.id}&imdb_id={movie.imdb_id}&kinopoisk_id={movie.kinopoisk_id}&title={HttpUtility.UrlEncode(title)}&original_title={HttpUtility.UrlEncode(original_title)}&serial={serial}&original_language={movie.original_language}&year={release_date}",
+                playlist_url = $"{host}/lite/events?id={movie.id}&source=tmdb&external_ids=true&imdb_id={movie.imdb_id}&kinopoisk_id={movie.kinopoisk_id}&title={HttpUtility.UrlEncode(title)}&original_title={HttpUtility.UrlEncode(original_title)}&serial={serial}&original_language={movie.original_language}&year={release_date}",
             });
         }
 
@@ -62,6 +68,38 @@ public class CubController : BaseController
                 : null
         });
     }
+
+    static string TmdbUrl(string search, string cat, string sort, int withoutGenres, int genre, int page)
+    {
+        string listenHost = CoreInit.conf.listen.localhost is "0.0.0.0" or "::" ? "127.0.0.1" : CoreInit.conf.listen.localhost;
+        string endpoint = string.IsNullOrWhiteSpace(search) ? $"discover/{cat}" : $"search/{cat}";
+        var query = new List<string>
+        {
+            $"api_key={HttpUtility.UrlEncode(CoreInit.conf.cub.api_key)}",
+            "language=ru-RU",
+            "include_adult=false",
+            $"page={page}"
+        };
+
+        if (!string.IsNullOrWhiteSpace(search))
+            query.Add($"query={HttpUtility.UrlEncode(search)}");
+        else
+        {
+            query.Add($"sort_by={SortValue(cat, sort)}");
+            if (genre > 0) query.Add($"with_genres={genre}");
+            if (withoutGenres > 0) query.Add($"without_genres={withoutGenres}");
+        }
+
+        return $"http://{listenHost}:{CoreInit.conf.listen.port}/tmdb/api/3/{endpoint}?{string.Join("&", query)}";
+    }
+
+    static string SortValue(string cat, string sort) => sort switch
+    {
+        "top" or "now_playing" or "airing" => "popularity.desc",
+        "now" or "releases" when cat == "tv" => "first_air_date.desc",
+        "now" or "releases" => "primary_release_date.desc",
+        _ => "popularity.desc"
+    };
 
 
     static List<ForkPlaylistItem> BuilderMenu(string uri, string search, string cat, string sort, int without_genres, int genre, int page)

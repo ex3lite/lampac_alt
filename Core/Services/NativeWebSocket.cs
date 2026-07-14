@@ -105,13 +105,19 @@ public class NativeWebSocket : INws
         using (var socket = await context.WebSockets.AcceptWebSocketAsync().ConfigureAwait(false))
         {
             string connectionId = null;
+            var requestInfo = context.Features.Get<RequestModel>();
 
             if (context.Request.Query.TryGetValue("id", out StringValues _connectionId) && _connectionId.Count > 0)
             {
                 if (!string.IsNullOrEmpty(_connectionId[0]))
                 {
                     connectionId = _connectionId[0];
-                    if (_connections.TryRemove(connectionId, out var _conn))
+                    if (_connections.TryGetValue(connectionId, out var existing)
+                        && !string.Equals(existing.RequestInfo?.user_uid, requestInfo?.user_uid, StringComparison.Ordinal))
+                    {
+                        connectionId = null;
+                    }
+                    else if (connectionId != null && _connections.TryRemove(connectionId, out var _conn))
                     {
                         Interlocked.Exchange(ref _conn.SendCancelFlag, 0);
                         _conn.Cancel();
@@ -141,8 +147,6 @@ public class NativeWebSocket : INws
                     return;
                 }
                 #endregion
-
-                var requestInfo = context.Features.Get<RequestModel>();
 
                 connection = new NwsConnection(connectionId, socket, CoreInit.Host(context), requestInfo);
                 connection.SetCancellationSource(cancellationSource);
